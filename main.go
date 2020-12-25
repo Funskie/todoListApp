@@ -27,8 +27,13 @@ func main() {
 	router := gin.Default()
 	router.GET("/", func(c *gin.Context) { helpers.WrapResponse(c, "Todolist API", nil) })
 	router.GET("/healthz", controllers.Healthz)
+	router.GET("/todo-completed", controllers.GetCompletedItems)
+	router.GET("/todo-incompleted", controllers.GetIncompletedItems)
 
 	router.POST("/todo", controllers.CreateTodoItem)
+	router.POST("/todo/:id", controllers.UpdateTodoItem)
+
+	router.DELETE("/todo/:id", controllers.DeleteItem)
 
 	router.Run(":80")
 }

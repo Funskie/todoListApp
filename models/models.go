@@ -36,7 +36,7 @@ func (item *TodoItemModel) UpdateDescription() error {
 	}).Error
 }
 
-func (item *TodoItemModel) UpdateComplete() error {
+func (item *TodoItemModel) UpdateCompleted() error {
 	return DB.Model(item).Update(map[string]interface{}{
 		"completed": item.Completed,
 	}).Error
@@ -46,7 +46,20 @@ func (item *TodoItemModel) Delete() error {
 	return DB.Delete(item).Error
 }
 
-func (item *TodoItemModel) GetLastItem() (interface{}, error) {
-	last := DB.Last(item)
-	return last.Value, last.Error
+func GetLastItem() (*TodoItemModel, error) {
+	var item TodoItemModel
+	err := DB.Last(&item).Error
+	return &item, err
+}
+
+func GetItemByID(Id int) (*TodoItemModel, error) {
+	var item TodoItemModel
+	err := DB.First(&item, Id).Error
+	return &item, err
+}
+
+func GetTodoItem(completed bool) (*[]TodoItemModel, error) {
+	var todos []TodoItemModel
+	err := DB.Where("completed = ?", completed).Find(&todos).Error
+	return &todos, err
 }
