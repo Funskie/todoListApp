@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/Funskie/todoListApp/controllers"
-	"github.com/Funskie/todoListApp/helpers"
 	"github.com/Funskie/todoListApp/models"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 )
@@ -25,7 +25,11 @@ func main() {
 	log.Info("Starting Todolist API server")
 
 	router := gin.Default()
-	router.GET("/", func(c *gin.Context) { helpers.WrapResponse(c, "Todolist API", nil) })
+	router.Use(cors.Default())
+	router.LoadHTMLGlob("templates/*")
+	router.Static("/assetPath", "./assets")
+
+	router.GET("/", controllers.IndexPage)
 	router.GET("/healthz", controllers.Healthz)
 	router.GET("/todo-completed", controllers.GetCompletedItems)
 	router.GET("/todo-incompleted", controllers.GetIncompletedItems)
@@ -35,5 +39,5 @@ func main() {
 
 	router.DELETE("/todo/:id", controllers.DeleteItem)
 
-	router.Run(":80")
+	router.Run(":8000")
 }
