@@ -15,7 +15,7 @@ type TodoItemModel struct {
 var DB *gorm.DB
 
 func InitDB() (*gorm.DB, error) {
-	db, err := gorm.Open("mysql", "root:root@/todolist?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:root@tcp(localhost:3306)/todolist?charset=utf8&parseTime=True&loc=Local")
 	if err == nil {
 		DB = db
 		db.LogMode(true)
